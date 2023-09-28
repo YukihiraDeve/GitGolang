@@ -26,6 +26,11 @@ func Start() error {
 		log.Fatal("PORT is not set")
 	}
 
+	app.Get("/download", func(c *fiber.Ctx) error {
+		return c.SendFile("repositories.zip", true)
+	})
+
 	log.Printf("Server is running on http://localhost:%s", port)
 	return app.Listen(fmt.Sprintf(":%s", port))
+
 }

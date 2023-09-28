@@ -20,7 +20,7 @@ func main() {
 	}
 
 	var wg sync.WaitGroup
-	wg.Add(2)
+	wg.Add(1)
 
 	go func() {
 		defer wg.Done()
@@ -35,13 +35,20 @@ func main() {
 		userURL := os.Getenv("userURL")
 
 		userRepos := api.GetRepositories(userURL)
-		
+
 		for _, repo := range userRepos {
 			fmt.Printf("- %s: %s\n", repo.Name, repo.HTMLURL)
 		}
-	}()
 
-	// Attendre que les deux goroutines soient terminées
+		log.Println("End goroutine Git")
+
+	}()
 	wg.Wait()
+
+	log.Println("Zip de Git")
+	err := api.CreateArchive("git", "repositories.zip")
+	if err != nil {
+		log.Fatalf("Erreur lors de la création de l'archive : %v", err)
+	}
 
 }

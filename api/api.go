@@ -49,9 +49,11 @@ func GetRepositories(url string) Repositories {
 	wg.Add(2)
 
 	go func() {
+		defer wg.Done()
 		WriteRepositoriesToCSV(repositories, "repositories.csv")
 	}()
 	go func() {
+		defer wg.Done()
 		cloneRepositories(repositories)
 	}()
 
@@ -70,67 +72,69 @@ func WriteRepositoriesToCSV(repos Repositories, filename string) {
 	writer := csv.NewWriter(file)
 	defer writer.Flush()
 
-	// Écrire l'en-tête du CSV
 	err = writer.Write([]string{"Name", "Description", "URL"})
 	if err != nil {
 		log.Fatal("Erreur lors de l'écriture dans le fichier CSV :", err)
 	}
 
-	// Écrire les données des repositories
 	for _, repo := range repos {
 		err := writer.Write([]string{repo.Name, repo.Description, repo.HTMLURL})
 		if err != nil {
 			log.Fatal("Erreur lors de l'écriture dans le fichier CSV :", err)
 		}
 	}
+	log.Println("CSV Whrite terminé")
 }
 
 func cloneRepositories(repos Repositories) {
 	for _, repo := range repos {
 		cloneDir := filepath.Join("git")
 
+		// Création du dossier de clonage s'il n'existe pas
 		err := os.MkdirAll(cloneDir, os.ModePerm)
 		if err != nil {
 			log.Fatalf("Impossible de créer le dossier de clonage %s : %v", cloneDir, err)
 		}
+
+		repoPath := filepath.Join(cloneDir, repo.Name)
 		log.Println("git clone ", repo.Name)
-		cmd := exec.Command("git", "clone", repo.HTMLURL)
-		cmd.Dir = cloneDir
-		cmd.Run()
+		cmd := exec.Command("git", "clone", repo.HTMLURL, filepath.Join(cloneDir, repo.Name))
+		err = cmd.Run()
 
 		if err != nil {
 			log.Printf("Erreur lors du clonage du dépôt %s : %v", repo.Name, err)
 		}
 
-		pullLatestBranch(repo.Name)
+		log.Println("Git clone terminé" + repoPath)
+
+		pullLatestBranch(repoPath)
 	}
 }
 
-func pullLatestBranch(repoName string) {
+func pullLatestBranch(repoPath string) {
+	log.Println("Git pull sur la derniere branch", repoPath)
 
-	log.Println("Git pull sur le repo", repoName)
-	repoPath := filepath.Join("git", repoName)
-
-	// Naviguez dans le dossier du dépôt
-	err := os.Chdir(repoPath)
+	// Exécutez git fetch pour récupérer toutes les références de branches en local
+	cmd := exec.Command("git", "-C", repoPath, "fetch")
+	err := cmd.Run()
 	if err != nil {
-		log.Printf("Erreur lors de la navigation dans le dossier du dépôt %s : %v", repoPath, err)
+		log.Printf("Erreur lors de l'exécution de git fetch dans le dépôt %s : %v", repoPath, err)
 		return
 	}
 
 	// Trouvez la branche avec le dernier commit
-	cmd := exec.Command("git", "-C", repoPath, "for-each-ref", "--sort=-committerdate", "--count=1", "--format=%(refname:short)", "refs/heads/")
+	cmd = exec.Command("git", "-C", repoPath, "for-each-ref", "--sort=-committerdate", "--count=1", "--format=%(refname:short)", "refs/heads/")
 	output, err := cmd.Output()
 	if err != nil {
-		log.Printf("Erreur lors de la recherche de la dernière branche du dépôt %s : %v", repoName, err)
+		log.Printf("Erreur lors de la recherche de la dernière branche du dépôt %s : %v", repoPath, err)
 		return
 	}
 	branchName := strings.TrimSpace(string(output))
 
-	// Exécutez git pull sur la dernière branche
 	cmd = exec.Command("git", "-C", repoPath, "pull", "origin", branchName)
 	err = cmd.Run()
 	if err != nil {
-		log.Printf("Erreur lors de l'exécution de git pull sur la branche %s du dépôt %s : %v", branchName, repoName, err)
+		log.Printf("Erreur lors de l'exécution de git pull sur la branche %s du dépôt %s : %v", branchName, repoPath, err)
 	}
+	log.Println("Git pull terminé" + repoPath)
 }
