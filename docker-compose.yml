@@ -1,0 +1,10 @@
+version: "3.9"
+
+services:
+  myapp:
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    environment:
+      - userURL="https://api.github.com/users/{Username}/repos"
