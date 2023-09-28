@@ -21,7 +21,7 @@ Une fois déployée, la dApp aura comme fonctionnalités de :
 6. Si un Token API Github est fourni, l’application doit en supplément cloner les repositories privés de l’ utilisateur ou l’organisation,
 7. Rendre disponible le téléchargement de ces repositories via une API.
 
-8. L’utilisation des notions Golang suivantes est obligatoire : Webserver HTTP pour le téléchargement de l’archive, Goroutines & Waitgroups pour optimiser l’exécution du code.
+L’utilisation des notions Golang suivantes est obligatoire : Webserver HTTP pour le téléchargement de l’archive, Goroutines & Waitgroups pour optimiser l’exécution du code.
 La dApp doit être Dockerisée afin de faciliter son déploiement. Des volumes persistants pour la BDD sont à prévoir.
 
 ## Temps
