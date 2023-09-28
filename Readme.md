@@ -24,4 +24,4 @@ L’application doit écrire un CSV de cette liste, avec l’ensemble des inform
 La dApp doit être Dockerisée afin de faciliter son déploiement. Des volumes persistants pour la BDD sont à prévoir.
 
 ## Temps
-⋅⋅* 5heures
+- 5heures
