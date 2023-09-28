@@ -14,13 +14,13 @@ L’application doit écrire un CSV de cette liste, avec l’ensemble des inform
 
 3. L’application doit exécuter un Git Pull sur la dernière branche modifiée (dernier commit) en local. L’application doit aussi exécuter un Git Fetch pour récupérer toutes les références de branches en local. L’application doit créer une archive (ZIP ou 7z) de ces repositories à la fin du traitement en local.
 
-4. Une fois déployée, la dApp aura comme fonctionnalités de :
-5. Spécifier le pseudo Github d’un utilisateur ou une organisation,
-6. Lister et cloner les repositories publiques de l’utilisateur ou l’organisation,
-7. Si un Token API Github est fourni, l’application doit en supplément cloner les repositories privés de l’ utilisateur ou l’organisation,
-8. Rendre disponible le téléchargement de ces repositories via une API.
+Une fois déployée, la dApp aura comme fonctionnalités de :
+4. Spécifier le pseudo Github d’un utilisateur ou une organisation,
+5. Lister et cloner les repositories publiques de l’utilisateur ou l’organisation,
+6. Si un Token API Github est fourni, l’application doit en supplément cloner les repositories privés de l’ utilisateur ou l’organisation,
+7. Rendre disponible le téléchargement de ces repositories via une API.
 
-9. L’utilisation des notions Golang suivantes est obligatoire : Webserver HTTP pour le téléchargement de l’archive, Goroutines & Waitgroups pour optimiser l’exécution du code.
+8. L’utilisation des notions Golang suivantes est obligatoire : Webserver HTTP pour le téléchargement de l’archive, Goroutines & Waitgroups pour optimiser l’exécution du code.
 La dApp doit être Dockerisée afin de faciliter son déploiement. Des volumes persistants pour la BDD sont à prévoir.
 
 ## Temps
