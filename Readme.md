@@ -15,6 +15,7 @@ L’application doit écrire un CSV de cette liste, avec l’ensemble des inform
 3. L’application doit exécuter un Git Pull sur la dernière branche modifiée (dernier commit) en local. L’application doit aussi exécuter un Git Fetch pour récupérer toutes les références de branches en local. L’application doit créer une archive (ZIP ou 7z) de ces repositories à la fin du traitement en local.
 
 Une fois déployée, la dApp aura comme fonctionnalités de :
+
 4. Spécifier le pseudo Github d’un utilisateur ou une organisation,
 5. Lister et cloner les repositories publiques de l’utilisateur ou l’organisation,
 6. Si un Token API Github est fourni, l’application doit en supplément cloner les repositories privés de l’ utilisateur ou l’organisation,
